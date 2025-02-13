@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./provider";
 import EasterEggs  from "@/components/ui/easter-egg";
+import RemoteCursors from "@/components/realtime/remote-cursors";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -35,6 +36,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <RemoteCursors/>
             <EasterEggs />
           </ThemeProvider>
       </body>

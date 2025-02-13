@@ -8,7 +8,11 @@ import OnlineUsers from "@/components/realtime/online-users";
 const Hero = () => {
   return (
     <div className="pb-20 pt-36">
+      <div className="w-screen absolute z-10 top-0 items-center justify-center">
+      
       <OnlineUsers/>
+      
+      </div>
       <div>
         <Spotlight
           className="-top-40 -left-10 md:-top-20 md;-left-32 h-screen"
