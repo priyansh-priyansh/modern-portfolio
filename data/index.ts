@@ -172,31 +172,17 @@ export const navItems = [
   export const workExperience = [
     {
       id: 1,
-      title: "Alpha (DSA with Java)",
+      title: "Alpha",
       desc: "Completed the Alpha (DSA with Java) course by Apna College.",
       className: "md:col-span-2",
       thumbnail: "/Alpha.png",
     },
     {
       id: 2,
-      title: "Mobile App Dev - JSM Tech",
-      desc: "Designed and developed mobile app for both iOS & Android platforms using React Native.",
+      title: "Delta",
+      desc: "Completed the Delta (Full Stack Web Devlopment) course by Apna College.",
       className: "md:col-span-2", 
       thumbnail: "/Delta.png",
-    },
-    {
-      id: 3,
-      title: "Freelance App Dev Project",
-      desc: "Led the dev of a mobile app for a client, from initial concept to deployment on app stores.",
-      className: "md:col-span-2", 
-      thumbnail: "/exp3.svg",
-    },
-    {
-      id: 4,
-      title: "Lead Frontend Developer",
-      desc: "Developed and maintained user-facing features using modern frontend technologies.",
-      className: "md:col-span-2",
-      thumbnail: "/exp4.svg",
     },
   ];
   
