@@ -87,3 +87,19 @@
     background: linear-gradient(90deg, #161a31 0%, #06091f 100%);
   }
 }
+
+/* Hide the scrollbar track but keep the thumb */
+::-webkit-scrollbar {
+  width: 8px;  /* Adjust width for visibility */
+}
+
+/* Style the thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #CBACF9;
+  border-radius: 10px;
+}
+
+/* Hide the scrollbar track */
+::-webkit-scrollbar-track {
+  background:#06091f;
+}

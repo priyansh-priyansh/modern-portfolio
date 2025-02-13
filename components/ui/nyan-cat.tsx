@@ -91,10 +91,11 @@ const AnimatedDiv = ({
       animate={controls}
       onAnimationComplete={onCompleted}
       onClick={handlePause}
+      className="pointer-events-none"
     >
       <img
         src="/nyan-cat.gif"
-        className={cn("fixed z-50 h-40 w-auto")}
+        className={cn("fixed h-40 w-auto z-[5]")}
         alt="Nyan Cat"
       />
     </motion.div>

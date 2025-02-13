@@ -10,12 +10,16 @@ export const PinContainer = ({
   href,
   className,
   containerClassName,
+  target,
+  rel,
 }: {
   children: React.ReactNode;
   title?: string;
   href?: string;
   className?: string;
   containerClassName?: string;
+  target?: string;
+  rel?: string;
 }) => {
   const [transform, setTransform] = useState(
     "translate(-50%,-50%) rotateX(0deg)"
@@ -37,6 +41,8 @@ export const PinContainer = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       href={href || "/"}
+      target={target || "_blank"}
+      rel={rel || "noopener noreferrer"}
     >
       <div
         style={{
@@ -54,7 +60,7 @@ export const PinContainer = ({
           <div className={cn(" relative z-50 ", className)}>{children}</div>
         </div>
       </div>
-      <PinPerspective title={title} href={href} />
+      <PinPerspective title={title} href={href}/>
     </Link>
   );
 };
