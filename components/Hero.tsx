@@ -3,10 +3,12 @@ import { Spotlight } from "./ui/Spotlight";
 import { TextGenerateEffect } from "./ui/TextGenerateEffect";
 import MagicButton from "./ui/MagicButton";
 import { FaLocationArrow } from "react-icons/fa";
+import OnlineUsers from "@/components/realtime/online-users";
 
 const Hero = () => {
   return (
     <div className="pb-20 pt-36">
+      <OnlineUsers/>
       <div>
         <Spotlight
           className="-top-40 -left-10 md:-top-20 md;-left-32 h-screen"
