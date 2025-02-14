@@ -7,6 +7,17 @@ import Clients from "@/components/Clients";
 import Experience from "@/components/Experience";
 import Approach from "@/components/Approach";
 import Footer from "@/components/Footer";
+import { Metadata } from 'next'
+import { siteMetadata } from './metadata'
+
+export const metadata: Metadata = {
+  title: 'Home | ' + siteMetadata.title,
+  openGraph: {
+    title: 'Home | ' + siteMetadata.title,
+    // ... other OpenGraph properties
+  },
+  // ... other metadata
+}
 
 export default function Home() {
   return (
