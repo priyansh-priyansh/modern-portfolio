@@ -5,6 +5,7 @@ import { ThemeProvider } from "./provider";
 import EasterEggs  from "@/components/ui/easter-egg";
 import Preloader from "@/components/preloader";
 import ElasticCursor from "@/components/ui/ElasticCursor";
+import RealtimeCursor from "@/components/RealtimeCursor";
 import { siteMetadata } from './metadata'
 
 const geistSans = Geist({
@@ -86,9 +87,10 @@ export default function RootLayout({
         >
           {children}
           <Preloader>
-            <ElasticCursor/>
             <EasterEggs />
+            <ElasticCursor/>
           </Preloader>
+          <RealtimeCursor />
         </ThemeProvider>
       </body>
     </html>
