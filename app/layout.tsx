@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./provider";
 import EasterEggs  from "@/components/ui/easter-egg";
+import Preloader from "@/components/preloader";
+import ElasticCursor from "@/components/ui/ElasticCursor";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -35,8 +37,10 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
-            
+            <Preloader>
+              <ElasticCursor/>
             <EasterEggs />
+            </Preloader>
           </ThemeProvider>
       </body>
     </html>

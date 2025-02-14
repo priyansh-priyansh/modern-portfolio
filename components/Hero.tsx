@@ -38,7 +38,7 @@ const Hero = () => {
             Hi, I&apos;m Priyansh, a Full Stack Web Developer based in India.
           </p>
 
-          <a href="https://drive.google.com/file/d/1_b0yWiBRlZEkaoziVLWFvwXVTFt45z78/view?usp=share_link?usp=sharing">
+          <a href="https://drive.google.com/file/d/1_b0yWiBRlZEkaoziVLWFvwXVTFt45z78/view?usp=share_link?usp=sharing" target="_blank" rel="noopener noreferrer">
             <MagicButton
               title="View Resume"
               icon={<FaLocationArrow />}
