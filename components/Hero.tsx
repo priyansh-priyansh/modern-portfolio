@@ -4,6 +4,12 @@ import { TextGenerateEffect } from "./ui/TextGenerateEffect";
 import MagicButton from "./ui/MagicButton";
 import { FaLocationArrow } from "react-icons/fa";
 import ScrollDownIcon from "./scroll-down-icon";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipProvider,
+} from "@/components/ui/Tooltip";
 
 const Hero = () => {
   return (
@@ -38,13 +44,25 @@ const Hero = () => {
             Hi, I&apos;m Priyansh, a Full Stack Web Developer based in India.
           </p>
 
-          <a href="https://drive.google.com/file/d/1_b0yWiBRlZEkaoziVLWFvwXVTFt45z78/view?usp=share_link?usp=sharing" target="_blank" rel="noopener noreferrer">
-            <MagicButton
-              title="View Resume"
-              icon={<FaLocationArrow />}
-              position="right"
-            />
-          </a>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <a href="https://drive.google.com/file/d/1_b0yWiBRlZEkaoziVLWFvwXVTFt45z78/view?usp=share_link?usp=sharing" target="_blank" rel="noopener noreferrer">
+                  <MagicButton
+                    title="View Resume"
+                    icon={<FaLocationArrow />}
+                    position="right"
+                  />
+                </a>
+              </TooltipTrigger>
+              <TooltipContent
+                side="top"
+                className="bg-black-100 border border-white/[0.2] text-white shadow-xl"
+              >
+                there&apos;s something waiting for you in devtools
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
 
