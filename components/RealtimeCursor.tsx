@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/utils/supabase";
 import { generateRandomCursor } from "@/lib/generate-random-cursor";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface CursorData {
     id: string;
@@ -15,18 +15,45 @@ interface CursorData {
     is_typing: boolean;
 }
 
+const FloatingMessage = ({ message }: { message: string }) => {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: -1000 }}
+            exit={{ opacity: 0 }}
+            transition={{ 
+                duration: 5,
+                ease: "easeOut"
+            }}
+            className="fixed bottom-20 left-1/2 -translate-x-1/2 pointer-events-none z-[999999]"
+        >
+            <div className="bg-black/80 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
+                <span className="animate-rainbow-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
+                    {message}
+                </span>
+            </div>
+        </motion.div>
+    );
+};
+
 export default function RealtimeCursor() {
     const [cursors, setCursors] = useState<Record<string, CursorData>>({});
     const [isTyping, setIsTyping] = useState(false);
     const [message, setMessage] = useState("");
+    const [floatingMessages, setFloatingMessages] = useState<{ id: string; message: string }[]>([]);
     const userId = typeof window !== "undefined" ? localStorage.getItem("user_id") || crypto.randomUUID() : "";
     const [cursorStyle] = useState(generateRandomCursor());
+    const lastKnownPosition = useRef({ x: 0, y: 0 });
+    const messageTimeout = useRef<NodeJS.Timeout>();
 
     const updateCursorPosition = async (x: number, y: number, typing = isTyping, msg = message) => {
+        // Always update last known position
+        lastKnownPosition.current = { x, y };
+
         await supabase.from("cursors").upsert([{
             user_id: userId,
             x_position: x,
-            y_position: y + window.scrollY,
+            y_position: y,
             color: cursorStyle.color,
             is_typing: typing,
             message: msg,
@@ -38,31 +65,52 @@ export default function RealtimeCursor() {
         if (typeof window !== "undefined") localStorage.setItem("user_id", userId);
 
         const handleMouseMove = async (e: MouseEvent) => {
-            await updateCursorPosition(e.clientX, e.clientY);
+            await updateCursorPosition(e.pageX, e.pageY, isTyping, message);
         };
 
         const handleKeyDown = async (e: KeyboardEvent) => {
             if (e.key === 'Enter') {
                 if (isTyping && message) {
+                    if (messageTimeout.current) {
+                        clearTimeout(messageTimeout.current);
+                    }
+
+                    // Send message without floating animation for sender
                     await updateCursorPosition(
-                        cursors[userId]?.x_position || 0,
-                        (cursors[userId]?.y_position || 0) - window.scrollY,
-                        false,
+                        lastKnownPosition.current.x,
+                        lastKnownPosition.current.y,
+                        false, // Set to false so other users see it as a sent message
                         message
                     );
-                    setTimeout(() => {
+                    
+                    messageTimeout.current = setTimeout(async () => {
+                        await updateCursorPosition(
+                            lastKnownPosition.current.x,
+                            lastKnownPosition.current.y,
+                            false,
+                            ""
+                        );
                         setMessage("");
                         setIsTyping(false);
-                    }, 2000);
+                    }, 5000);
                 } else {
                     setIsTyping(true);
+                    await updateCursorPosition(
+                        lastKnownPosition.current.x,
+                        lastKnownPosition.current.y,
+                        true,
+                        ""
+                    );
                 }
             } else if (e.key === 'Escape' && isTyping) {
+                if (messageTimeout.current) {
+                    clearTimeout(messageTimeout.current);
+                }
                 setIsTyping(false);
                 setMessage("");
                 await updateCursorPosition(
-                    cursors[userId]?.x_position || 0,
-                    (cursors[userId]?.y_position || 0) - window.scrollY,
+                    lastKnownPosition.current.x,
+                    lastKnownPosition.current.y,
                     false,
                     ""
                 );
@@ -74,8 +122,21 @@ export default function RealtimeCursor() {
 
         const subscription = supabase
             .channel("cursors")
-            .on("postgres_changes", { event: "*", schema: "public", table: "cursors" }, (payload) => {
+            .on("postgres_changes", { event: "*", schema: "public", table: "cursors" }, (payload: any) => {
                 if (payload.new.user_id !== userId) {
+                    const prevMessage = cursors[payload.new.user_id]?.message || '';
+                    const newMessage = payload.new.message || '';
+                    
+                    // Show floating message if there's a new non-empty message and it's not a typing update
+                    if (newMessage && newMessage !== prevMessage && !payload.new.is_typing) {
+                        const messageId = Date.now().toString();
+                        setFloatingMessages(prev => [...prev, { id: messageId, message: newMessage }]);
+                        
+                        setTimeout(() => {
+                            setFloatingMessages(prev => prev.filter(msg => msg.id !== messageId));
+                        }, 5000);
+                    }
+
                     setCursors((prev) => ({ ...prev, [payload.new.user_id]: payload.new }));
                 }
             })
@@ -85,31 +146,33 @@ export default function RealtimeCursor() {
             document.removeEventListener("mousemove", handleMouseMove);
             document.removeEventListener("keydown", handleKeyDown);
             subscription.unsubscribe();
+            if (messageTimeout.current) {
+                clearTimeout(messageTimeout.current);
+            }
         };
     }, [userId, cursorStyle, isTyping, message]);
 
     const handleMessageUpdate = async (newMessage: string) => {
         setMessage(newMessage);
         await updateCursorPosition(
-            cursors[userId]?.x_position || 0,
-            (cursors[userId]?.y_position || 0) - window.scrollY,
+            lastKnownPosition.current.x,
+            lastKnownPosition.current.y,
             true,
             newMessage
         );
     };
 
     return (
-        <div className="fixed inset-0 pointer-events-none isolate" style={{ zIndex: 999999 }}>
-            {Object.values(cursors)
-                .filter(cursor => cursor.user_id !== userId)
-                .map((cursor) => (
+        <>
+            <div className="fixed inset-0 pointer-events-none isolate" style={{ zIndex: 999999 }}>
+                {Object.values(cursors).map((cursor) => (
                     <motion.div
                         key={cursor.user_id}
                         className="absolute"
                         initial={false}
                         animate={{
                             left: cursor.x_position,
-                            top: cursor.y_position - window.scrollY,
+                            top: cursor.y_position,
                         }}
                         transition={{
                             duration: 0.2,
@@ -149,16 +212,22 @@ export default function RealtimeCursor() {
                         )}
                     </motion.div>
                 ))}
-            {isTyping && (
-                <input
-                    type="text"
-                    value={message}
-                    onChange={(e) => handleMessageUpdate(e.target.value)}
-                    className="fixed bottom-4 left-1/2 -translate-x-1/2 w-64 px-4 py-2 rounded-full bg-black/80 text-white outline-none pointer-events-auto"
-                    placeholder="Type your message..."
-                    autoFocus
-                />
-            )}
-        </div>
+                {isTyping && (
+                    <input
+                        type="text"
+                        value={message}
+                        onChange={(e) => handleMessageUpdate(e.target.value)}
+                        className="fixed bottom-4 left-1/2 -translate-x-1/2 w-64 px-4 py-2 rounded-full bg-black/80 text-white outline-none pointer-events-auto"
+                        placeholder="Type your message..."
+                        autoFocus
+                    />
+                )}
+            </div>
+            <AnimatePresence>
+                {floatingMessages.map(({ id, message }) => (
+                    <FloatingMessage key={id} message={message} />
+                ))}
+            </AnimatePresence>
+        </>
     );
 }
