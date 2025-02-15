@@ -6,6 +6,10 @@ export const navItems = [
     { name: "Testimonials", link: "#testimonials" },
     { name: "Contact", link: "#contact" },
   ];
+
+  export const post = [
+    { name: "Home", link: "/" },
+  ];
   
   export const gridItems = [
     {
@@ -78,7 +82,7 @@ export const navItems = [
       des: "Explore the wonders of Zentry with a captivating GSAP-powered design.",
       img: "/Zentry.png",
       iconLists: ["/re.svg", "/tail.svg", "/js.svg", "/gsap.svg", "/css.svg"],
-      link: "https://lemonchiffon-cheetah-361541.hostingersite.com",
+      link: "/api/zentry",
     },
     {
       id: 2,
@@ -86,7 +90,7 @@ export const navItems = [
       des: "Seamlessly book unique stays with Airbnb's intuitive, modern UI.",
       img: "/Airbnb.avif",
       iconLists: ["/css.svg", "/js.svg", "/nodejs.svg", "/mdb.svg", "/bootstrap.svg"],
-      link: "https://airbnb-chi-seven.vercel.app/listings",
+      link: "/api/wanderlust",
     },
     {
       id: 3,
@@ -94,7 +98,7 @@ export const navItems = [
       des: "Showcase your work with a sleek, interactive portfolio powered by Next.js & Three.js.",
       img: "/Untitled.png",
       iconLists: ["/re.svg", "/tail.svg", "/ts.svg", "/three.svg", "/next.svg"],
-      link: "https://priyanshweb.com/",
+      link: "/api/portfolio",
     },
   ];
   
