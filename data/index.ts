@@ -1,5 +1,3 @@
-
-
 export const navItems = [
     { name: "About", link: "#about" },
     { name: "Projects", link: "#projects" },
@@ -82,7 +80,7 @@ export const navItems = [
       des: "Explore the wonders of Zentry with a captivating GSAP-powered design.",
       img: "/Zentry.png",
       iconLists: ["/re.svg", "/tail.svg", "/js.svg", "/gsap.svg", "/css.svg"],
-      link: "/api/zentry",
+      link: "/projects/zentry/",
     },
     {
       id: 2,
@@ -90,7 +88,7 @@ export const navItems = [
       des: "Seamlessly book unique stays with Airbnb's intuitive, modern UI.",
       img: "/Airbnb.avif",
       iconLists: ["/css.svg", "/js.svg", "/nodejs.svg", "/mdb.svg", "/bootstrap.svg"],
-      link: "/api/wanderlust",
+      link: "/projects/wanderlust",
     },
     {
       id: 3,
@@ -98,7 +96,7 @@ export const navItems = [
       des: "Showcase your work with a sleek, interactive portfolio powered by Next.js & Three.js.",
       img: "/Untitled.png",
       iconLists: ["/re.svg", "/tail.svg", "/ts.svg", "/three.svg", "/next.svg"],
-      link: "/api/portfolio",
+      link: "/projects/portfolio",
     },
   ];
   
@@ -133,7 +131,7 @@ export const navItems = [
     },
     {
       quote:
-        "Priyansh doesn’t just build websites—he crafts experiences. His ability to blend cutting-edge technology with creative design made our platform stand out in a crowded market. Highly recommend working with him!",
+        "Priyansh doesn't just build websites—he crafts experiences. His ability to blend cutting-edge technology with creative design made our platform stand out in a crowded market. Highly recommend working with him!",
       name: "Olivia Martinez",
       title: "Creative Director at Visionary Hub",
       image: "/testimonial5.jpeg"

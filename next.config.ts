@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
+
 const nextConfig: NextConfig = {
-  output: "export",
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
   typescript: {
     ignoreBuildErrors: true, 
   },
@@ -11,6 +15,9 @@ const nextConfig: NextConfig = {
     config.infrastructureLogging = { level: "error" }; // Suppresses webpack warnings in dev
     return config;
   },
+  trailingSlash: true,
+  basePath: '',
+  assetPrefix: '',
 };
 
 export default nextConfig;
